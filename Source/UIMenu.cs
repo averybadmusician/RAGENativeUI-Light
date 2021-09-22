@@ -8,19 +8,15 @@
 *
 */
 
-
+using Rage;
+using Rage.Native;
+using RAGENativeUI.Elements;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-
-using Rage;
-using Rage.Native;
-
-using RAGENativeUI.Elements;
-using RAGENativeUI.Internals;
 
 namespace RAGENativeUI
 {
@@ -140,11 +136,6 @@ namespace RAGENativeUI
         /// Used to keep <see cref="Shared.NumberOfVisibleMenus"/> consistent when unloading the plugin with some menu open.
         /// </summary>
         internal static uint NumberOfVisibleMenus { get; set; }
-
-        /// <summary>
-        /// Gets whether any menu is currently visible. Includes menus from the executing plugin and from other plugins.
-        /// </summary>
-        public static bool IsAnyMenuVisible => Shared.NumberOfVisibleMenus > 0;
 
 #if false
         // This can be used to detect if any native script menu is initialized such that the script can draw it.
@@ -628,7 +619,7 @@ namespace RAGENativeUI
 
         // drawing variables
         private float menuWidth;
-        private float itemHeight = 0.034722f;
+        private readonly float itemHeight = 0.034722f;
         private float itemsX, itemsY; // start position of the items, for mouse input
         private float upDownX, upDownY; // start position of the up-down arrows, for mouse input
         private float customBannerX, customBannerY,
@@ -695,10 +686,14 @@ namespace RAGENativeUI
             }
 
             if (ControlDisablingEnabled)
+            {
                 DisEnableControls(false);
+            }
 
             if (AllowCameraMovement && ControlDisablingEnabled)
+            {
                 EnableCameraMovement();
+            }
 
             if (InstructionalButtonsEnabled)
             {
@@ -1309,9 +1304,13 @@ namespace RAGENativeUI
             menuToBind.ParentMenu = this;
             menuToBind.ParentItem = itemToBindTo;
             if (Children.ContainsKey(itemToBindTo))
+            {
                 Children[itemToBindTo] = menuToBind;
+            }
             else
+            {
                 Children.Add(itemToBindTo, menuToBind);
+            }
         }
 
         /// <summary>
@@ -1321,7 +1320,11 @@ namespace RAGENativeUI
         /// <returns>Returns true if the operation was successful.</returns>
         public bool ReleaseMenuFromItem(UIMenuItem releaseFrom)
         {
-            if (!Children.ContainsKey(releaseFrom)) return false;
+            if (!Children.ContainsKey(releaseFrom))
+            {
+                return false;
+            }
+
             Children[releaseFrom].ParentItem = null;
             Children[releaseFrom].ParentMenu = null;
             Children.Remove(releaseFrom);
@@ -1699,7 +1702,6 @@ namespace RAGENativeUI
             RefreshIndex();
         }
 
-
         private void EnableCameraMovement()
         {
             N.EnableControlAction(0, GameControl.LookLeftRight);
@@ -1777,7 +1779,6 @@ namespace RAGENativeUI
                     {
                         if (!IgnoreVisibility)
                         {
-                            Shared.NumberOfVisibleMenus++;
                             NumberOfVisibleMenus++;
                         }
                         MenuOpenEv();
@@ -1786,7 +1787,6 @@ namespace RAGENativeUI
                     {
                         if (!IgnoreVisibility)
                         {
-                            Shared.NumberOfVisibleMenus--;
                             NumberOfVisibleMenus--;
                         }
                     }
@@ -1840,7 +1840,7 @@ namespace RAGENativeUI
                         {
                             MenuItems[currentItem].Selected = false;
                         }
-                        
+
                         currentItem = value;
 
                         if (IsValidItemIndex(currentItem))

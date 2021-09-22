@@ -1,9 +1,8 @@
 ﻿namespace RAGENativeUI.Elements
 {
-    using System.Collections.Generic;
     using Rage;
-    using Rage.Native;
     using RAGENativeUI.Internals;
+    using System.Collections.Generic;
 
     public class TimerBarPool : BaseCollection<TimerBarBase>
     {
@@ -20,6 +19,9 @@
             base.Remove(item);
         }
 
+        static uint LastFrame = 0;
+        static float TotalHeight = 0;
+        static bool IngamehudScriptExecuting = false;
         public unsafe void Draw()
         {
             if (InternalList.Count > 0)
@@ -34,14 +36,14 @@
                 N.SetScriptGfxAlignParams(0.0f, 0.0f, 0.952f, 0.949f);
 
                 uint frame = Game.FrameCount;
-                bool newFrame = frame != Shared.TimerBarsLastFrame;
+                bool newFrame = frame != LastFrame;
 
                 if (newFrame)
                 {
-                    Shared.TimerBarsLastFrame = frame;
+                    LastFrame = frame;
                     if (ScriptGlobals.TimersBarsTotalHeightAvailable)
                     {
-                        Shared.IngamehudScriptExecuting = N.GetNumberOfReferencesOfScript(0xC45650F0 /* ingamehud */) > 0;
+                        IngamehudScriptExecuting = N.GetNumberOfReferencesOfScript(0xC45650F0 /* ingamehud */) > 0;
                     }
 
                     N.HideHudComponentThisFrame(6); // VehicleName
@@ -59,7 +61,7 @@
                     y = lastY;
                     hasTotalHeight = false;
                 }
-                else if (ScriptGlobals.TimersBarsTotalHeightAvailable && Shared.IngamehudScriptExecuting)
+                else if (ScriptGlobals.TimersBarsTotalHeightAvailable && IngamehudScriptExecuting)
                 {
                     ref float timerBarsTotalHeight = ref ScriptGlobals.TimerBarsTotalHeight;
                     ref float timerBarsPrevTotalHeight = ref ScriptGlobals.TimerBarsPrevTotalHeight;
@@ -76,7 +78,7 @@
                 }
                 else
                 {
-                    totalHeight = ref Shared.TimerBarsTotalHeight;
+                    totalHeight = ref TotalHeight;
 
                     if (newFrame)
                     {
@@ -108,4 +110,3 @@
         }
     }
 }
-

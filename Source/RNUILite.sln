@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RAGENativeUI", "RAGENativeUI.csproj", "{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examples", "Examples\Examples.csproj", "{FB83ECBC-E996-4314-8C65-E79211AEA8BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RNUILite", "RNUILite.csproj", "{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,12 +18,6 @@ Global
 		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}.Debug-NoILMerge|x64.Build.0 = Debug-NoILMerge|x64
 		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}.Release|x64.ActiveCfg = Release|x64
 		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}.Release|x64.Build.0 = Release|x64
-		{FB83ECBC-E996-4314-8C65-E79211AEA8BC}.Debug|x64.ActiveCfg = Debug|x64
-		{FB83ECBC-E996-4314-8C65-E79211AEA8BC}.Debug|x64.Build.0 = Debug|x64
-		{FB83ECBC-E996-4314-8C65-E79211AEA8BC}.Debug-NoILMerge|x64.ActiveCfg = Debug-NoILMerge|x64
-		{FB83ECBC-E996-4314-8C65-E79211AEA8BC}.Debug-NoILMerge|x64.Build.0 = Debug-NoILMerge|x64
-		{FB83ECBC-E996-4314-8C65-E79211AEA8BC}.Release|x64.ActiveCfg = Release|x64
-		{FB83ECBC-E996-4314-8C65-E79211AEA8BC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

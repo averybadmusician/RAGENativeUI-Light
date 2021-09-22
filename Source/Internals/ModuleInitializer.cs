@@ -6,8 +6,8 @@
 
 namespace RAGENativeUI.Internals
 {
-    using System.Runtime.CompilerServices;
     using Rage;
+    using System.Runtime.CompilerServices;
 
     internal static class ModuleInitializer
     {
@@ -15,17 +15,13 @@ namespace RAGENativeUI.Internals
         internal static void Run()
         {
             Game.LogTrivialDebug("[RAGENativeUI] Initializing...");
-
-            Game.LogTrivialDebug($"[RAGENativeUI] > {nameof(Shared)}");
 #if DEBUG
             var sw = System.Diagnostics.Stopwatch.StartNew();
 #endif
-            RuntimeHelpers.RunClassConstructor(typeof(Shared).TypeHandle);
 #if DEBUG
             sw.Stop();
             Game.LogTrivialDebug($"[RAGENativeUI] >> Took {sw.ElapsedMilliseconds}ms");
 #endif
-
 
             Game.LogTrivialDebug($"[RAGENativeUI] > {nameof(Memory)}");
 #if DEBUG
@@ -41,7 +37,6 @@ namespace RAGENativeUI.Internals
 #if DEBUG
             sw.Restart();
 #endif
-            Hooks.Init();
 #if DEBUG
             sw.Stop();
             Game.LogTrivialDebug($"[RAGENativeUI] >> Took {sw.ElapsedMilliseconds}ms");

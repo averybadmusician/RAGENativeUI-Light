@@ -1,12 +1,12 @@
 namespace RAGENativeUI.Elements
 {
-    using System;
-    using System.Linq;
-    using System.Collections.Generic;
     using Rage;
-    using System.Drawing;
     using RAGENativeUI.Internals;
+    using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Drawing;
+    using System.Linq;
 
     public class InstructionalButtons
     {
@@ -92,6 +92,7 @@ namespace RAGENativeUI.Elements
         }
 
         private static int numberOfRowsReturnValueId = 0;
+        private static int numberOfRowsReturnValuePrev = 0;
         private static uint numberOfRowsReturnValueFrame = 0;
         internal static int NumberOfRows // TODO: make NumberOfRows public?
         {
@@ -107,6 +108,7 @@ namespace RAGENativeUI.Elements
                             {
                                 int rows = N.GetScaleformMovieMethodReturnValueInt(numberOfRowsReturnValueId);
                                 numberOfRowsReturnValueId = 0;
+                                numberOfRowsReturnValuePrev = rows;
                                 return rows;
                             }
 
@@ -115,7 +117,7 @@ namespace RAGENativeUI.Elements
                                 numberOfRowsReturnValueId = 0;
                             }
 
-                            return Shared.NumInstructionalButtonsRows; // return the previous number of rows until the return value is ready
+                            return numberOfRowsReturnValuePrev; // return the previous number of rows until the return value is ready
                         }
                         else
                         {
@@ -127,7 +129,7 @@ namespace RAGENativeUI.Elements
                                     {
                                         numberOfRowsReturnValueId = N.EndScaleformMovieMethodReturnValue();
                                         numberOfRowsReturnValueFrame = frame;
-                                        return Shared.NumInstructionalButtonsRows; // return the previous number of rows until the return value is ready
+                                        return numberOfRowsReturnValuePrev; // return the previous number of rows until the return value is ready
                                     }
                                 }
                             }
@@ -136,15 +138,7 @@ namespace RAGENativeUI.Elements
 
                     return N.BusySpinnerIsOn() ? 1 : 0;
                 }
-
-                uint frame = Game.FrameCount;
-                if (Shared.NumInstructionalButtonsRowsLastFrame != frame)
-                {
-                    Shared.NumInstructionalButtonsRowsLastFrame = frame;
-                    Shared.NumInstructionalButtonsRows = GetInstructionalButtonsRows(frame);
-                }
-
-                return Shared.NumInstructionalButtonsRows;
+                return GetInstructionalButtonsRows(Game.GameTime);
             }
         }
 
@@ -218,10 +212,10 @@ namespace RAGENativeUI.Elements
 
         /// <inheritdoc/>
         public Predicate<IInstructionalButtonSlot> CanBeDisplayed { get; set; }
-        
+
         /// <inheritdoc/>
         public GameControl? BindedControl { get; set; }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstructionalButton"/> class.
         /// </summary>
@@ -376,7 +370,7 @@ namespace RAGENativeUI.Elements
         }
 
         /// <inheritdoc/>
-        public string GetButtonId() => UIMenu.IsUsingController ? InstructionalButtonGroup.GetButtonId(ButtonsForController) : 
+        public string GetButtonId() => UIMenu.IsUsingController ? InstructionalButtonGroup.GetButtonId(ButtonsForController) :
                                                                   InstructionalButtonGroup.GetButtonId(ButtonsForKeyboard);
     }
 
@@ -395,7 +389,7 @@ namespace RAGENativeUI.Elements
         /// <summary>
         /// Gets the <see cref="string"/> that represents the button contents.
         /// </summary>
-        public string Id => id ?? (control.HasValue ? N.GetControlInstructionalButton(2, control.Value)  : EmptyButtonId);
+        public string Id => id ?? (control.HasValue ? N.GetControlInstructionalButton(2, control.Value) : EmptyButtonId);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstructionalButtonId"/> structure.

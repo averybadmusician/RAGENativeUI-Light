@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using Rage;
 using Rage.Native;
 using RAGENativeUI.Elements;
-using RAGENativeUI.Internals;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace RAGENativeUI.PauseMenu
 {
@@ -19,7 +18,7 @@ namespace RAGENativeUI.PauseMenu
         /// <summary>
         /// Gets whether any pause menu is currently visible. Includes pause menus from the executing plugin and from other plugins.
         /// </summary>
-        public static bool IsAnyPauseMenuVisible => Shared.NumberOfVisiblePauseMenus > 0;
+        public static bool IsAnyPauseMenuVisible => NumberOfVisiblePauseMenus > 0;
 
         public TabView(string title)
         {
@@ -66,31 +65,37 @@ namespace RAGENativeUI.PauseMenu
             {
                 // if the value is not changed, then don't change any properties or call any methods to avoid false data
                 if (_visible == value)
+                {
                     return;
+                }
 
                 _visible = value;
 
                 if (value)
                 {
-                    Shared.NumberOfVisiblePauseMenus++;
                     NumberOfVisiblePauseMenus++;
                     N.SetPlayerControl(Game.LocalPlayer, false, 0);
                     if (PlayBackgroundEffect)
+                    {
                         N.AnimPostFxPlay("MinigameTransitionIn", 0, true);
+                    }
+
                     if (PauseGame)
+                    {
                         Game.IsPaused = true;
+                    }
                 }
                 else
                 {
                     CleanUp(this);
-                    Shared.NumberOfVisiblePauseMenus--;
                     NumberOfVisiblePauseMenus--;
                     if (PauseGame)
+                    {
                         Game.IsPaused = false;
+                    }
                 }
             }
         }
-
 
         public int Index;
         private bool _visible;
@@ -124,7 +129,7 @@ namespace RAGENativeUI.PauseMenu
                 Tabs[Index].Active = true;
                 Tabs[Index].Focused = false;
                 Tabs[Index].Visible = true;
-                
+
                 Common.PlaySound("NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET");
             }
 
@@ -183,7 +188,10 @@ namespace RAGENativeUI.PauseMenu
                     Tabs[Index].Focused = false;
                     Tabs[Index].Visible = false;
                     if (Tabs[Index] is TabSubmenuItem submenuItem)
+                    {
                         submenuItem.RefreshIndex();
+                    }
+
                     Index = (1000 - (1000 % Tabs.Count) + Index - 1) % Tabs.Count;
                     Tabs[Index].Active = true;
                     Tabs[Index].Focused = false;
@@ -200,7 +208,10 @@ namespace RAGENativeUI.PauseMenu
                     Tabs[Index].Focused = false;
                     Tabs[Index].Visible = false;
                     if (Tabs[Index] is TabSubmenuItem submenuItem)
+                    {
                         submenuItem.RefreshIndex();
+                    }
+
                     Index = (1000 - (1000 % Tabs.Count) + Index + 1) % Tabs.Count;
                     Tabs[Index].Active = true;
                     Tabs[Index].Focused = false;
@@ -212,7 +223,10 @@ namespace RAGENativeUI.PauseMenu
                 }
             }
 
-            if (Tabs.Count > 0) Tabs[Index].ProcessControls();
+            if (Tabs.Count > 0)
+            {
+                Tabs[Index].ProcessControls();
+            }
         }
 
         public void RefreshIndex()
@@ -233,14 +247,17 @@ namespace RAGENativeUI.PauseMenu
 
         public void Update()
         {
-            if (!Visible || TemporarilyHidden) return;
+            if (!Visible || TemporarilyHidden)
+            {
+                return;
+            }
 
             ShowInstructionalButtons();
             NativeFunction.Natives.HideHudAndRadarThisFrame();
             //NativeFunction.CallByHash<uint>(0xaae7ce1d63167423); // _SHOW_CURSOR_THIS_FRAME
-            
+
             ProcessControls();
-            
+
             var res = UIMenu.GetScreenResolutionMantainRatio();
             var safe = new Point(300, 180);
 
@@ -268,7 +285,6 @@ namespace RAGENativeUI.PauseMenu
                 {
                     subt = DateTime.Now.ToString();
                 }
-
 
                 ResText.Draw(subt, new Point((int)res.Width - safe.X - 70, safe.Y - 60), 0.4f, Color.White, Common.EFont.ChaletComprimeCologne, ResText.Alignment.Right, true, false, Size.Empty);
 
@@ -318,7 +334,10 @@ namespace RAGENativeUI.PauseMenu
 
         public void DrawTextures(Rage.Graphics g)
         {
-            if (!Visible) return;
+            if (!Visible)
+            {
+                return;
+            }
 
             Tabs[Index].DrawTextures(g);
         }
@@ -335,7 +354,9 @@ namespace RAGENativeUI.PauseMenu
         {
             N.SetPlayerControl(Game.LocalPlayer, true, 0);
             if (view?.PlayBackgroundEffect ?? true)
+            {
                 N.AnimPostFxStop("MinigameTransitionIn");
+            }
         }
     }
 }
